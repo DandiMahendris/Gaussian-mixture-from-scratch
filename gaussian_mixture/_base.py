@@ -420,5 +420,76 @@ class BaseEstimator(metaclass=ABCMeta):
             log_resp = weighted_log_prob - log_prob_norm[:, np.newaxis]
         return log_prob_norm, log_resp
     
+    def predict(self, X):
+        """Predict the labels for the data samples in X using trained model.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            List of n_features-dimensional data points. Each row
+            corresponds to a single data point.
+
+        Returns
+        -------
+        labels : array, shape (n_samples,)
+            Component labels.
+        """
+        
+        return self._estimate_weighted_log_prob(X).argmax(axis=1)
+    
+    def predict_proba(self, X):
+        """Evaluate the components' density for each sample.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            List of n_features-dimensional data points. Each row
+            corresponds to a single data point.
+
+        Returns
+        -------
+        resp : array, shape (n_samples, n_components)
+            Density of each Gaussian component for each sample in X.
+        """
+        
+        _, log_resp = self._estimate_log_prob_resp(X)
+        return np.exp(log_resp)
+    
+    def score_samples(self, X):
+        """Compute the log-likelihood of each sample.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            List of n_features-dimensional data points. Each row
+            corresponds to a single data point.
+
+        Returns
+        -------
+        log_prob : array, shape (n_samples,)
+            Log-likelihood of each sample in `X` under the current model.
+        """
+        return logsumexp(self._estimate_weighted_log_prob(X), axis=1)
+    
+    def score(self, X, y=None):
+        """Compute the per-sample average log-likelihood of the given data X.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_dimensions)
+            List of n_features-dimensional data points. Each row
+            corresponds to a single data point.
+
+        y : Ignored
+            Not used, present for API consistency by convention.
+
+        Returns
+        -------
+        log_likelihood : float
+            Log-likelihood of `X` under the Gaussian mixture model.
+        """
+        
+        return self.score_samples(X).mean()
+    
     
      
