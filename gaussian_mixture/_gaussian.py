@@ -2,7 +2,6 @@ import numpy as np
 from scipy import linalg
 
 from ._base import BaseEstimator
-from ._kmeans import row_norms
 
 def _compute_precision_cholesky(covariances, covariance_type):
     """Compute the Cholesky decomposition of the precisions.
@@ -116,27 +115,9 @@ def _estimate_log_gaussian_prob(X, means, precisions_chol, covariance_type):
             y = np.dot(X, prec_chol) - np.dot(mu, prec_chol)
             log_prob[:, k] = np.sum(np.square(y), axis=1)
 
-    elif covariance_type == "tied":
-        log_prob = np.empty((n_samples, n_components))
-        for k, mu in enumerate(means):
-            y = np.dot(X, precisions_chol) - np.dot(mu, precisions_chol)
-            log_prob[:, k] = np.sum(np.square(y), axis=1)
+    else:
+        raise ValueError("another covariance_type is not added yet")
 
-    elif covariance_type == "diag":
-        precisions = precisions_chol**2
-        log_prob = (
-            np.sum((means**2 * precisions), 1)
-            - 2.0 * np.dot(X, (means * precisions).T)
-            + np.dot(X**2, precisions.T)
-        )
-
-    elif covariance_type == "spherical":
-        precisions = precisions_chol**2
-        log_prob = (
-            np.sum(means**2, 1) * precisions
-            - 2 * np.dot(X, means.T * precisions)
-            + np.outer(row_norms(X, squared=True), precisions)
-        )
     # Since we are using the precision of the Cholesky decomposition,
     # `- 0.5 * log_det_precision` becomes `+ log_det_precision_chol`
     return -0.5 * (n_features * np.log(2 * np.pi) + log_prob) + log_det
