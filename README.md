@@ -129,12 +129,12 @@ Here we shall suppose that we are given a Gaussian marginal distribution $p(x)$ 
 <a id="equation1"></a>
 $$p(z_k=1) = π_k \tag{1}$$
 
-Where the parameter $ 0\leq π_k \leq 1$, together given $\sum_{i=1}^{K}π_k=1$.
+Where the parameter $0 \leq{π_k} \leq{1}$, together given $\sum_{i=1}^{K}π_k=1$.
 
 Similarly, the condition distribution of $x$ given a particular value for $z$ is a Gaussian $p(x|z_k=1)$ describe by:
 
 <a id="equation2"></a>  
-$$ p(x|z_k=1) = \mathcal{N}(x|\mu_k, ƹ_k) \tag{2} $$
+$$p(x|z_k=1) = \mathcal{N}(x | \mu_k, ƹ_k) \tag{2} $$
 
 Then <b><i>Joint distribution</i></b> is given by $p(z)p(x|z)$, and the <b><i>marginal distribution</i></b> of x which $p(x)$ is obtained by summing the joint the distribution over all possible states of z to give $p(x) = p(z)p(x|z)$. it follows that for every observed data point $x_n$ there is a corresponding latent variable $z_n$ 
 
@@ -144,7 +144,7 @@ $$p(x) = \sum_{z} p(z)p(x|z) = \sum_{k=1}^{K} π_k \mathcal{N}(x|\mu_k, ƹ_k) \t
 Moreover, having <i><b>joint distribution</b></i> $p(x|z)$ instead of <i><b>marginal distribution</b></i> $p(x)$, and this will lead to introduction of Expectation-Maximization Method (EM). Another entity that having important in this algorithm is as well as <b>conditional probability of z given by x</b> or <b><i>posterior probabilities</i></b>. This conditional probability is well known as <b><i>responsibility</i></b> or $γ(z_k)$ that denotes the value of $P(z_k =1|x)$, with the value found by using <b>Bayes Theorem</b> as well.
 
 <a id="equation4"></a>
-$$ γ(z_k) = p(z_k=1|x) = \frac{π_k \mathcal{N}(x|\mu_k, ƹ_k)}{\sum_{j=1}^{K} π_j \mathcal{N}(x|\mu_j, ƹ_j)} \tag{4} $$
+$$γ(z_k) = p(z_k=1|x) = \frac{π_k \mathcal{N}(x|\mu_k, ƹ_k)}{\sum_{j=1}^{K} π_j \mathcal{N}(x|\mu_j, ƹ_j)} \tag{4} $$
 
 This value of $γ(z_k)$ is explain as the <b>the responsibility that component</b> $k$ <b>takes for explaining the observation of</b> $x$.
 
@@ -160,7 +160,7 @@ This value of $γ(z_k)$ is explain as the <b>the responsibility that component</
 Suppose we want to model dataset with Gaussian Mixture using dataset of observation {${x_1, x_2, …., x_N}$}, we can represent this data as $N x D$ matrix $x$ in which nth row and corresponding latent variable that also denoted by $N x K$ matrix $z$. We can express the log likelihood function given by. 
 
 <a id="equation5"></a>
-$$ ln \ p(x|\pi, \mu, ƹ) = \sum_{n=1}^{N} ln \ (\sum_{k=1}^{K} \mu_k \ \mathcal{N} (x_n|\mu_k, ƹ_k)) \tag{5}$$
+$$ln \ p(x|\pi, \mu, ƹ) = \sum_{n=1}^{N} ln \ (\sum_{k=1}^{K} \mu_k \ \mathcal{N} (x_n|\mu_k, ƹ_k)) \tag{5}$$
 
 However, there’s significant problem associated with the maximum likelihood <b>due to the presence of <i>singularities</i></b>. Suppose the one of components of the mixture model $j^{th}$, has its mean $\mu_j$ exactly equal to one of the data points so that $\mu_j = x_n$ for some value of $n$.
 
@@ -220,7 +220,7 @@ The initialization values of ($\pi_0$), ($\mu_0$), and ($ƹ_0$) are calculated b
 the values of cluster covariances depend heavily on the covariance type defined earlier. The value of $N_k$ is determined
 initially by summing the responsibilities matrix for each sample, as indicated by the [equation 9](#equation9) and stored as [K] matrix components. The calculation of
 ($\mu_0$) is performed using [equation 7](#equation7), which involves taking the dot product of the responsibilities matrix with the number
-of samples ($X_n$) and dividing it by $N_k$ and stored as [[K x D]] matrix components. The covariances ($ƹ_0$) are stored as an ndarray with dimensions [[K x D x D]]. Performing the same calculations, we can obtain the initial values for ($\pi_0$), ($\mu_0$), and ($ƹ_0$) based on the <b>responsibilities $γ(z_k)$ </b>obtained earlier.
+of samples ($X_n$) and dividing it by $N_k$ and stored as [[K x D]] matrix components. The covariances ($ƹ_0$) are stored as an ndarray with dimensions [[K x D x D]]. Performing the same calculations, we can obtain the initial values for ($\pi_0$), ($\mu_0$), and ($ƹ_0$) based on the <b>responsibilities</b> $γ(z_k)$ obtained earlier.
 
 
 <p align="center" id="figure8">
@@ -256,7 +256,7 @@ a valid Gaussian distribution.
 ## 2. Expectation Step (E-Step)
 -------
 
-Expectation step finding the best <b><i>normalized log likelihood</i></b> in N x K components. Normalized log likelihood is calculated using [equation 11](#equation11), by performing `scipy.logsumexp` on. Expectation step also return <b>log responsibilities $ln \ γ(z_k)$</b>, as the value of difference between <b><i>weighted log likelihood</i></b> and <b><i>normalized log likelihood.</i></b>
+Expectation step finding the best <b><i>normalized log likelihood</i></b> in N x K components. Normalized log likelihood is calculated using [equation 11](#equation11), by performing `scipy.logsumexp` on. Expectation step also return <b>log responsibilities</b> $ln \ γ(z_k)$, as the value of difference between <b><i>weighted log likelihood</i></b> and <b><i>normalized log likelihood.</i></b>
 
 <a id="equation11"></a>
 $$ln \ p(x, z |\mu, ƹ, \pi) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk} (ln \ \pi_k + ln \ \mathcal{N}(X_n|\mu_k, ƹ_k)) \tag{11} $$
@@ -305,7 +305,7 @@ $$ ln \ γ(z_{nk}) = ln \ p(x, z|\mu, ƹ, \pi) - ln \sum^{N}\sum^{K} e^{ln \ p(x
 
 ## 3. Maximization Step (M-Step)
 
-This <i>log responsibilities</i> $ ln \ γ(z_{nk})$ is used in <b></i>Maximization (M-Step)</b></i> in order to initialize the new value of $\pi_k$, $\mu_k$, $ƹ_k$ and <i>inverse covariancek (prec chol)</i> that will be used in next Expectation (E-Step) if converged is not reached. 
+This <i>log responsibilities</i> $\ln γ(z_{nk})$ is used in <b></i>Maximization (M-Step)</b></i> in order to initialize the new value of $\pi_k$, $\mu_k$, $ƹ_k$ and <i>inverse covariancek (prec chol)</i> that will be used in next Expectation (E-Step) if converged is not reached. 
 
 Converged is reached when change of our <i>normalized log-likelihood</i> of <b>i-iteration</b> and our <i>normalized log-probabilities</i> of <b>previous iteration</b> is lower than <b>tolerance (default = 0.001)</b> that we determined before. Then, the parameter of $\pi_k$, $\mu_k$, $ƹ_k$ and <i>inverse covariance (precison cholesky)</i> in certain iteration is stored as the best parameter of <i>t (n_init).</i>
 
