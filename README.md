@@ -129,7 +129,7 @@ Here we shall suppose that we are given a Gaussian marginal distribution $p(x)$ 
 <a id="equation1"></a>
 $$p(z_k=1) = π_k \tag{1}$$
 
-Where the parameter $0 \leq{π_k} \leq{1}$, together given $\sum_{i=1}^{K}\ π_k=1$.
+Where the parameter $0 \leq{π_k} \leq{1}$, together given $∑_{i=1}^{K}\ π_k=1$.
 
 Similarly, the condition distribution of $x$ given a particular value for $z$ is a Gaussian $p(x|z_k=1)$ describe by:
 
@@ -144,7 +144,7 @@ $$p(x) = \sum_{z} p(z)p(x|z) = \sum_{k=1}^{K} π_k \mathcal{N}(x|\mu_k, ƹ_k) \t
 Moreover, having <i><b>joint distribution</b></i> $p(x|z)$ instead of <i><b>marginal distribution</b></i> $p(x)$, and this will lead to introduction of Expectation-Maximization Method (EM). Another entity that having important in this algorithm is as well as <b>conditional probability of z given by x</b> or <b><i>posterior probabilities</i></b>. This conditional probability is well known as <b><i>responsibility</i></b> or $γ(z_k)$ that denotes the value of $P(z_k =1|x)$, with the value found by using <b>Bayes Theorem</b> as well.
 
 <a id="equation4"></a>
-$$γ(z_k) = p(z_k=1|x) = \frac{π_k \ \mathcal{N}(x|\mu_k, ƹ_k)}{\sum_{j=1}^{K} \ π_j \ \mathcal{N}(x|\mu_j, ƹ_j)} \tag{4} $$
+$$γ(z_k) = p(z_k=1|x) = \frac{π_k \ \mathcal{N}(x|\mu_k, ƹ_k)}{∑_{j=1}^{K} π_j \ \mathcal{N}(x|\mu_j, ƹ_j)} \tag{4} $$
 
 This value of $γ(z_k)$ is explain as the <b>the responsibility that component</b> $k$ <b>takes for explaining the observation of</b> $x$.
 
