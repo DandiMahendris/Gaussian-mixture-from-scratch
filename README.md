@@ -147,7 +147,7 @@ Moreover, having <i><b>joint distribution</b></i> $p(x|z)$ instead of <i><b>marg
 $$γ(z_k) = p(z_k=1|x) = \frac{π_k \ \mathcal{N}(x|\mu_k, ƹ_k)}{∑_{j=1}^{K} π_j \ \mathcal{N}(x|\mu_j, ƹ_j)} \tag{4} $$
 
 This value of $γ(z_k)$ is explain as the <b>the responsibility that component</b> $k$ <b>takes for explaining the observation of</b> $x$.
-
+  
 <p align="center" id="figure6">
 <img src="pics/image-2.png" width=500>
 <figcaption style="text-align:center;font-size:14px;"><b><i>Figure 6</b> Component of Gaussian mixture shown by marginal distribution for each gaussian</i></figcaption>
