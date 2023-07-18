@@ -13,14 +13,14 @@
       <ul>
         <li><a href="#1-gaussian-mixture">1. Gaussian Mixture</a></li>
         <li><a href="#2-maximum-likelihood">2. Maximum Likelihood</a></li>
-        <li><a href="#3-expectation-maximization-method-(em)">3. Expectation-Maximization Method (EM)</li>
+        <li><a href="#3-expectation-maximization-method-em">3. Expectation-Maximization Method (EM)</li>
        </ul>
     <li>
-        <a href="#pseudocode-GMM-algorithm">Pseudocode GMM Algorithm</a>
+        <a href="#pseudocode-of-gmm-algorithm">Pseudocode of GMM Algorithm</a>
         <ul>
-            <li><a href="#3-1-initialization-of-weight,-means,-covariance-and-inverse-covariance">3.1 Initialization of weights, means, covariance and inverse covariance</a></li>
-            <li><a href="#3-2-expectation-maximization-step-(em)">3.2 Expectation-Maximization Step (EM)</a></li>
-            <li><a href="#3-3-predicted-clusters-of-n_samples">3.3 Predicted Clusters of n_samples</a</li>>
+            <li><a href="#1-initialization-of-weight-mean-and-covariance">1. Initialization of weights, means, and covariance</a></li>
+            <li><a href="#2-expectation-maximization-step-em">2. Expectation-Maximization Step (EM)</a></li>
+            <li><a href="#3-predicted-clusters-of-n_samples">3. Predicted Clusters of n_samples</a></li>
         </ul>
         </li>
     <li>
@@ -68,7 +68,7 @@ whichever point to have the highest probability to have come from each Gaussians
 cluster.
 
 <p align="center" id="figure4">
-<img src="image.png">
+<img src="pics/image.png">
 <figcaption style="text-align: center; font-size: 12px"><b><i>Figure 4.</b> Two class with its own Multivariate Gaussian distribution (Left), Consider we mixed the dataset and remove the label,
 composite dataset would not be Gaussian, but we know it’s composed of two Gaussians distribution (Right).</i></figcaption>
 </p>
@@ -119,16 +119,159 @@ We shall define the joint distribution $P(x,z)$ in terms of marginal distributio
 $P(x|z)$ (<b>[Figure 5](#figure5)</b>). We noted that the mean of the conditional distribution $P(x_a|x_b)$ was a linear function of $x_b$.
 
 <p align="center" id="figure5">
-<img src="image-1.png" width=500>
+<img src="pics/image-1.png" width=500>
 <figcaption style="text-align:center;font-size:12px;"><b>Figure 5.</b> (left) shows the contours of a Gaussian distribution <i>P(xa, xb)</i> over two variables, (right) shows the marginal distribution <i>P(xa)</i> (blue curve) and the conditional distribution <i>P(xa|xb)</i> for xb = 0.7 </figcaption>
 </p>
 
 Here we shall suppose that we are given a Gaussian marginal distribution $p(x)$ and a Gaussian conditional distribution $P(x|z)$ in which has a mean that is a liner function of x, and a covariance which is independent of x. <b> The marginal distribution over z is specified in terms of the mixing coefficients $π_k$ </b> with:
 
-$$p(z_k=1) = π_k$$
+<a id="equation1"></a>
+$$p(z_k=1) = π_k \tag{1}$$
 
 Where the parameter $ 0 \leq π_k \leq 1$, together given $\sum_{i=1}^{K}π_k=1$.
 
 Similarly, the condition distribution of $x$ given a particular value for $z$ is a Gaussian $p(x|z_k=1)$ describe by:
 
-$$ p(x|z_k=1) = \mathcal{N}(x|μ_k, ƹ_k) $$
+<a id="equation2"></a>
+$$ p(x|z_k=1) = \mathcal{N}(x|\mu_k, ƹ_k) \tag{2}$$
+
+Then <b><i>Joint distribution</i></b> is given by $p(z)p(x|z)$, and the <b><i>marginal distribution</i></b> of x which $p(x)$ is obtained by summing the joint the distribution over all possible states of z to give $p(x) = p(z)p(x|z)$. it follows that for every observed data point $x_n$ there is a corresponding latent variable $z_n$ 
+
+<a id="equation3"></a>
+$$p(x) = \sum_{z} p(z)p(x|z) = \sum_{k=1}^{K} π_k \mathcal{N}(x|\mu_k, ƹ_k) \tag{3}$$
+
+Moreover, having <i><b>joint distribution</b></i> $p(x|z)$ instead of <i><b>marginal distribution</b></i> $p(x)$, and this will lead to introduction of Expectation-Maximization Method (EM). Another entity that having important in this algorithm is as well as <b>conditional probability of z given by x</b> or <b><i>posterior probabilities</i></b>. This conditional probability is well known as <b><i>responsibility</i></b> or $γ(z_k)$ that denotes the value of $P(z_k =1|x)$, with the value found by using <b>Bayes Theorem</b> as well.
+
+<a id="equation4"></a>
+$$ γ(z_k) = p(z_k=1|x) = \frac{π_k \mathcal{N}(x|\mu_k, ƹ_k)}{\sum_{j=1}^{K} π_j \mathcal{N}(x|\mu_j, ƹ_j)} \tag{4} $$
+
+This value of $γ(z_k)$ is explain as the <b>the responsibility that component $k$ takes for explaining the observation of $x$.</b>
+
+<p align="center" id="figure6">
+<img src="pics/image-2.png" width=500>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 2. Maximum Likelihood
+------
+Suppose we want to model dataset with Gaussian Mixture using dataset of observation {${x_1, x_2, …., x_N}$}, we can represent this data as $N x D$ matrix $x$ in which nth row and corresponding latent variable that also denoted by $N x K$ matrix $z$. We can express the log likelihood function given by. 
+
+<a id="equation5"></a>
+$$ ln \ p(x|\pi, \mu, ƹ) = \sum_{n=1}^{N} ln \ (\sum_{k=1}^{K} \mu_k \ \mathcal{N} (x_n|\mu_k, ƹ_k)) \tag{5}$$
+
+However, there’s significant problem associated with the maximum likelihood <b>due to the presence of <i>singularities</i></b>. Suppose the one of components of the mixture model $j^{th}$, has its mean $\mu_j$ exactly equal to one of the data points so that $\mu_j = x_n$ for some value of $n$.
+
+This data point will then contribute a term of likelihood function of norm gaussian.
+
+<a id="equation6"></a>
+$$\mathcal{N}(x_n|\mu_n,ƹ_j^ 2{I}) = \frac{1}{(2 \pi)^\frac{1}{2}} \frac{1}{\sigma_j} \tag{6}$$
+
+Which we consider the <b>limit $\sigma_j = 0$</b> as denominator, then this norm of likelihood will goes to <b>infinity</b>.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 3. Expectation-Maximization Method (EM)
+--------------
+
+GMM algorithm first initialize <b>mean $(\mu_k)$, weight $(\pi_k)$, covariances $(ƹ_k)$</b> by setting the derivatives of $ln \  p(x|\pi, \mu, ƹ)$ in with respect to the <b>means and covariances.</b> 
+
+<a id="equation7"></a>
+$$\mu_k = \frac{1}{N_k} \sum_{n=1}^{N} γ(z_k) \cdot x_n  \tag{7}$$
+
+<a id="equation8"></a>
+$$ƹ_k = \frac{1}{N_k} \sum_{n=1}^{N} γ(z_k) (x_n-\mu_k)^T \cdot (x_n-\mu_k) \tag{8} $$
+
+With $N_k$ is defined as <b>the effective number of points $(x_n)$ assigned to cluster $k$</b>
+
+<a id="equation9"></a>
+$$N_k = \sum_{n=1}^{N} γ(z_k) \tag{9} $$
+
+<a id="equation10"></a>
+$$\pi_k = \frac{N_k}{N} \tag{10} $$
+
+In the <b><i>expectation</i> (E-Step)</b>, we use the those initial values for the parameters to evaluate <b><i>the posterior probabilities</i>, or <i>responsibilities. $γ(z)$</i></b>
+
+Then use these <b><i>responsibilities</i> $γ(z)$</b> in the <b><i>maximization</i> M-Step</b> to re-estimate the <b>weight ($\pi$), mean ($\mu$),</b> and <b>covariance ($ƹ$)</b>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+# Pseudocode of GMM Algorithm
+
+<p align="center" id="figure7">
+<img src="https://sungwookyoo.github.io/assets/images/GaussianMixtureModel_EMalgorithm_files/gmm_pseudo.png">
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 7</b> EM algorithm pseudocode</i>
+</figcaption>
+</p>
+
+In order to initialize the values of responsibilities, $γ(z_k)$, it is necessary to first define a parameter initialization to
+determine the <b>initial centroid</b> of the cluster and subsequently find the other centroids using the <b><i>k-means++</i></b> algorithm. An
+object, represented as a 2-D array, is created to store the values of responsibilities with a configuration of (N x K). By examining the distance between each sample (n) and the clusters, we can
+determine the index or identify which cluster is the closest to each sample. For the <b>responsibilities associated with sample
+n and cluster k, a value of 1 is assigned, while the responsibilities for the other clusters are set to 0.</b>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 1. Initialization of weight, mean, and covariance
+-------
+The initialization values of ($\pi_0$), ($\mu_0$), and ($ƹ_0$) are calculated based on the previously obtained <b>responsibilities</b>. However,
+the values of cluster covariances depend heavily on the covariance type defined earlier. The value of $N_k$ is determined
+initially by summing the responsibilities matrix for each sample, as indicated by the [equation 9](#equation9) and stored as [K] matrix components. The calculation of
+($\mu_0$) is performed using [equation 7](#equation7), which involves taking the dot product of the responsibilities matrix with the number
+of samples ($X_n$) and dividing it by $N_k$ and stored as [[K x D]] matrix components. The covariances ($ƹ_0$) are stored as an ndarray with dimensions [[K x D x D]]. Performing the same calculations, we can obtain the initial values for ($\pi_0$), ($\mu_0$), and ($ƹ_0$) based on the <b>responsibilities $γ(z_k)$ </b>obtained earlier.
+
+
+<p align="center" id="figure8">
+<img src="pics/image-3.png" width=650>
+</p>
+
+<div style="text-align: justify;">
+In GMM parameter estimation, one common approach is to estimate the mean and covariances matrix for each
+component using the <b>Expectation-Maximization (EM) Algorithm.</b> However, estimating the covariance matrix directly
+can be challenging because it needs to be <b>positive definite.</b> In some cases, it may become <b><i>ill-conditioned or singular</i>,
+causing numerical instability or convergence issues.</b> To overcame these challenges, <b><i>Cholesky Decomposition</i></b> is often
+employed. During the E-step, instead of estimating the covariance matrix directly, the Cholesky Decomposition is
+applied to the covariance matrix. The <b><i>Cholesky decomposition</i> express the covariance matrix as the product of a lower
+triangular matrix and its transpose.</b>
+<br><br>
+
+The <b><i>Cholesky decomposition</i> of a <i>Hermitian positive-definite</i> matrix A is a decomposition of the form <i>A = [L][L]<sup>T</sup></i></b>
+, where <b><i>L</i> is Lower triangulation matrix with real and positive diagonal entries</b>, and <b><i>L<sup>T</sup></i> denotes the conjugate
+transpose of <i>L</i></b>. Every Hermitian positive-definite matrix (and thus also every real-valued symmetric positive-definite
+matrix) has a unique Cholesky decomposition. Using Cholesky decomposition avoid Singularity Effect as the main
+issue of reaching maximum likelihood by ensures precision matrix (inverse covariance) remains positive definite for
+a valid Gaussian distribution.
+</div>
+
+<p align="center" id="figure9">
+<img src="pics/image-4.png" width=650">
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 2. Expectation-Maximization Step (EM)
+-------
+
+Expectation step finding the best <b><i>normalized log likelihood</i></b> in N x K components. Normalized log likelihood is calculated using [equation 11](#equation11), by performing `scipy.logsumexp` on. Expectation step also return <b>log responsibilities $ln \ γ(z_k)$</b>, as the value of difference between <b><i>weighted log likelihood</i></b> and <b><i>normalized log likelihood.</i></b>
+
+<a id="equation11"></a>
+$$ln \ p(x, z |\mu, ƹ, \pi) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk} (ln \ \pi_k + ln \ \mathcal{N}(X_n|\mu_k, ƹ_k)) \tag{11} $$
+<br>
+
+## 3. Predicted clusters of n_samples
+--------
+
+<p align="center" id="figure5">
+<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile27.uf.tistory.com%2Fimage%2F9993EC425AC8CE991E2AF5">
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 5.</b> GMM Predict pseudocode</i></figcaption>
+</p>
+
+# Test make_blobs Dataset
+------
+
+
+Reference:<br>
+[SungWookYo](https://sungwookyoo.github.io/study/algorithms/GaussianMixtureModel_EMalgorithm/)
+
+
+
