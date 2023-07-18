@@ -19,8 +19,9 @@
         <a href="#pseudocode-of-gmm-algorithm">Pseudocode of GMM Algorithm</a>
         <ul>
             <li><a href="#1-initialization-of-weight-mean-and-covariance">1. Initialization of weights, means, and covariance</a></li>
-            <li><a href="#2-expectation-maximization-step-em">2. Expectation-Maximization Step (EM)</a></li>
-            <li><a href="#3-predicted-clusters-of-n_samples">3. Predicted Clusters of n_samples</a></li>
+            <li><a href="#2-expectation-step-e-step">2. Expectation Step (E-Step)</a></li>
+            <li><a href="#3-maximization-step-m-step">3. Maximization Step (M-Step)</a></li>
+            <li><a href="#4-predicted-clusters-of-n_samples">4. Predicted Clusters of n_samples</a></li>
         </ul>
         </li>
     <li>
@@ -84,7 +85,7 @@ composite dataset would not be Gaussian, but we know it’s composed of two Gaus
 &emsp;&emsp;<b>Weights, Mean, Covariance, Responsibilities.</b>
 
 - Learning Algorithms: <br>
-&emsp;&emsp;Objective: Maximize weighted log-likelihood <br><br>
+&emsp;&emsp;<b>Objective: Maximize weighted log-likelihood</b> <br><br>
 &emsp;&emsp;by: <i>Expectation-Maximization</i> method
 
 - Input: <br>
@@ -123,17 +124,17 @@ $P(x|z)$ (<b>[Figure 5](#figure5)</b>). We noted that the mean of the conditiona
 <figcaption style="text-align:center;font-size:12px;"><b>Figure 5.</b> (left) shows the contours of a Gaussian distribution <i>P(xa, xb)</i> over two variables, (right) shows the marginal distribution <i>P(xa)</i> (blue curve) and the conditional distribution <i>P(xa|xb)</i> for xb = 0.7 </figcaption>
 </p>
 
-Here we shall suppose that we are given a Gaussian marginal distribution $p(x)$ and a Gaussian conditional distribution $P(x|z)$ in which has a mean that is a liner function of x, and a covariance which is independent of x. <b> The marginal distribution over z is specified in terms of the mixing coefficients $π_k$ </b> with:
+Here we shall suppose that we are given a Gaussian marginal distribution $p(x)$ and a Gaussian conditional distribution $P(x|z)$ in which has a mean that is a liner function of x, and a covariance which is independent of x. <b> The marginal distribution over z is specified in terms of the mixing coefficients</b> $π_k$  with:
 
 <a id="equation1"></a>
 $$p(z_k=1) = π_k \tag{1}$$
 
-Where the parameter $ 0 \leq π_k \leq 1$, together given $\sum_{i=1}^{K}π_k=1$.
+Where the parameter $ 0\leq π_k \leq 1$, together given $\sum_{i=1}^{K}π_k=1$.
 
 Similarly, the condition distribution of $x$ given a particular value for $z$ is a Gaussian $p(x|z_k=1)$ describe by:
 
-<a id="equation2"></a>
-$$ p(x|z_k=1) = \mathcal{N}(x|\mu_k, ƹ_k) \tag{2}$$
+<a id="equation2"></a>  
+$$ p(x|z_k=1) = \mathcal{N}(x|\mu_k, ƹ_k) \tag{2} $$
 
 Then <b><i>Joint distribution</i></b> is given by $p(z)p(x|z)$, and the <b><i>marginal distribution</i></b> of x which $p(x)$ is obtained by summing the joint the distribution over all possible states of z to give $p(x) = p(z)p(x|z)$. it follows that for every observed data point $x_n$ there is a corresponding latent variable $z_n$ 
 
@@ -145,10 +146,11 @@ Moreover, having <i><b>joint distribution</b></i> $p(x|z)$ instead of <i><b>marg
 <a id="equation4"></a>
 $$ γ(z_k) = p(z_k=1|x) = \frac{π_k \mathcal{N}(x|\mu_k, ƹ_k)}{\sum_{j=1}^{K} π_j \mathcal{N}(x|\mu_j, ƹ_j)} \tag{4} $$
 
-This value of $γ(z_k)$ is explain as the <b>the responsibility that component $k$ takes for explaining the observation of $x$.</b>
+This value of $γ(z_k)$ is explain as the <b>the responsibility that component</b> $k$ <b>takes for explaining the observation of</b> $x$.
 
 <p align="center" id="figure6">
 <img src="pics/image-2.png" width=500>
+<figcaption style="text-align:center;font-size:14px;"><b><i>Figure 6</b> Component of Gaussian mixture shown by marginal distribution for each gaussian</i></figcaption>
 </p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -167,14 +169,14 @@ This data point will then contribute a term of likelihood function of norm gauss
 <a id="equation6"></a>
 $$\mathcal{N}(x_n|\mu_n,ƹ_j^ 2{I}) = \frac{1}{(2 \pi)^\frac{1}{2}} \frac{1}{\sigma_j} \tag{6}$$
 
-Which we consider the <b>limit $\sigma_j = 0$</b> as denominator, then this norm of likelihood will goes to <b>infinity</b>.
+Which we consider the <b>limit</b> $\sigma_j = 0$ as denominator, then this norm of likelihood will goes to <b>infinity</b>.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 3. Expectation-Maximization Method (EM)
 --------------
 
-GMM algorithm first initialize <b>mean $(\mu_k)$, weight $(\pi_k)$, covariances $(ƹ_k)$</b> by setting the derivatives of $ln \  p(x|\pi, \mu, ƹ)$ in with respect to the <b>means and covariances.</b> 
+GMM algorithm first initialize <b>mean</b> $(\mu_k)$, <b>weight</b> $(\pi_k)$, <b>covariances</b> $(ƹ_k)$ by setting the derivatives of $ln \  p(x|\pi, \mu, ƹ)$ in with respect to the <b>means and covariances.</b> 
 
 <a id="equation7"></a>
 $$\mu_k = \frac{1}{N_k} \sum_{n=1}^{N} γ(z_k) \cdot x_n  \tag{7}$$
@@ -182,7 +184,7 @@ $$\mu_k = \frac{1}{N_k} \sum_{n=1}^{N} γ(z_k) \cdot x_n  \tag{7}$$
 <a id="equation8"></a>
 $$ƹ_k = \frac{1}{N_k} \sum_{n=1}^{N} γ(z_k) (x_n-\mu_k)^T \cdot (x_n-\mu_k) \tag{8} $$
 
-With $N_k$ is defined as <b>the effective number of points $(x_n)$ assigned to cluster $k$</b>
+With $N_k$ is defined as <b>the effective number of points</b> $(x_n)$ <b>assigned to cluster</b> $k$
 
 <a id="equation9"></a>
 $$N_k = \sum_{n=1}^{N} γ(z_k) \tag{9} $$
@@ -190,9 +192,9 @@ $$N_k = \sum_{n=1}^{N} γ(z_k) \tag{9} $$
 <a id="equation10"></a>
 $$\pi_k = \frac{N_k}{N} \tag{10} $$
 
-In the <b><i>expectation</i> (E-Step)</b>, we use the those initial values for the parameters to evaluate <b><i>the posterior probabilities</i>, or <i>responsibilities. $γ(z)$</i></b>
+In the <b><i>expectation</i> (E-Step)</b>, we use the those initial values for the parameters to evaluate <b><i>the posterior probabilities</i>, or <i>responsibilities</i></b> $γ(z)$ as shown in [equation 4](#equation4)
 
-Then use these <b><i>responsibilities</i> $γ(z)$</b> in the <b><i>maximization</i> M-Step</b> to re-estimate the <b>weight ($\pi$), mean ($\mu$),</b> and <b>covariance ($ƹ$)</b>
+Then use these <b><i>responsibilities</i></b> $γ(z)$ in the <b><i>maximization</i> M-Step</b> to re-estimate the <b>weight</b> ($\pi$), <b>mean</b> ($\mu$),and <b>covariance</b>($ƹ$)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -223,6 +225,7 @@ of samples ($X_n$) and dividing it by $N_k$ and stored as [[K x D]] matrix compo
 
 <p align="center" id="figure8">
 <img src="pics/image-3.png" width=650>
+<figcaption style="text-align:center;font-size:14px;"><b><i>Figure 8</b> Initialization of weight, mean, and covariance</i></figcaption>
 </p>
 
 <div style="text-align: justify;">
@@ -245,11 +248,12 @@ a valid Gaussian distribution.
 
 <p align="center" id="figure9">
 <img src="pics/image-4.png" width=650">
+<figcaption style="text-align:center;font-size:14px;"><b><i>Figure 9</b> Algorithm of Precision Cholesky</i></figcaption>
 </p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## 2. Expectation-Maximization Step (EM)
+## 2. Expectation Step (E-Step)
 -------
 
 Expectation step finding the best <b><i>normalized log likelihood</i></b> in N x K components. Normalized log likelihood is calculated using [equation 11](#equation11), by performing `scipy.logsumexp` on. Expectation step also return <b>log responsibilities $ln \ γ(z_k)$</b>, as the value of difference between <b><i>weighted log likelihood</i></b> and <b><i>normalized log likelihood.</i></b>
@@ -258,20 +262,138 @@ Expectation step finding the best <b><i>normalized log likelihood</i></b> in N x
 $$ln \ p(x, z |\mu, ƹ, \pi) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk} (ln \ \pi_k + ln \ \mathcal{N}(X_n|\mu_k, ƹ_k)) \tag{11} $$
 <br>
 
-## 3. Predicted clusters of n_samples
+- <b>Log Determinant</b>
+
+First step in expectation is to calculate <b>log determinant</b> of <i>Cholesky Decomposition (Inverse covariance)</i> which provide information about the volume or spread of the Gaussian distributions in the GMM.
+
+- <b>Log Gaussian Probabilities</b>
+
+<i>log gaussian probabilities</i> $p(x|z)$ computes the transformed data point of each component using the <i>precision matrix</i> and mean, and then calculates the <i>Square Euclidean</i> distance between the transformed data point and the mean.
+
+$$ ln \ \mathcal{N}(x_n|\mu_k, ƹ_k) = \frac{1}{2} (D \cdot ln(2\pi) + log prob) + log det \tag{11}$$
+
+<p align="center" id="figure10">
+<img src="pics/image-5.png" width=500>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 10</b> Algorithm of Log Determinant and Gaussian Probabilities</i></figcaption>
+</p>
+
+- <b>Weighted Log likelihood</b>
+
+sum of <i>Log Gaussian probabilities</i> which refer to $p(x|z)$ and <i>log weight</i> as $ln \ \pi$
+
+$$ ln \ p(x, z|\mu, ƹ, \pi) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk} \ ( ln \ \pi_k + ln \ \mathcal{N}(x_n|\mu_k, ƹ_k)) \tag{12} $$
+
+This value will return as final value if converged is reached, and it will determine the probabilities of which cluster will be assigned to.
+
+<p align="center" id="figure11">
+<img src="pics/image-7.png" width=400>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 11</b> Algorithm of weighted log likelihood</i></figcaption>
+</p>
+
+- <b> Log Responsibilities </b>
+
+<i>Log responsibilities</i> will return as value of difference between <i>weighted log likelihood</i> and <i>normalized log likelihood</i>
+
+$$ ln \ γ(z_{nk}) = ln \ p(x, z|\mu, ƹ, \pi) - ln \sum^{N}\sum^{K} e^{ln \ p(x, z|\mu, ƹ, \pi)} $$
+
+<p align="center" id="figure12">
+<img src="pics/image-6.png" width=400>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 12</b> Algorithm of log responsibilities</i></figcaption>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 3. Maximization Step (M-Step)
+
+This <i>log responsibilities</i> $ ln \ γ(z_{nk})$ is used in <b></i>Maximization (M-Step)</b></i> in order to initialize the new value of $\pi_k$, $\mu_k$, $ƹ_k$ and <i>inverse covariancek (prec chol)</i> that will be used in next Expectation (E-Step) if converged is not reached. 
+
+Converged is reached when change of our <i>normalized log-likelihood</i> of <b>i-iteration</b> and our <i>normalized log-probabilities</i> of <b>previous iteration</b> is lower than <b>tolerance (default = 0.001)</b> that we determined before. Then, the parameter of $\pi_k$, $\mu_k$, $ƹ_k$ and <i>inverse covariance (precison cholesky)</i> in certain iteration is stored as the best parameter of <i>t (n_init).</i>
+
+<p align="center" id="figure13">
+<img src="pics/image-8.png" width=500>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 13</b> Maximization step</i></figcaption>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## 4. Predicted clusters of n_samples
 --------
 
-<p align="center" id="figure5">
+<p align="center" id="figure14">
 <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile27.uf.tistory.com%2Fimage%2F9993EC425AC8CE991E2AF5">
-<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 5.</b> GMM Predict pseudocode</i></figcaption>
+<figcaption style="text-align:center; font-size:12px;"><b><i>Figure 14.</b> GMM Predict pseudocode</i></figcaption>
 </p>
+
+Predict function will return the <b>argmax of <i>log responsibilities</i></b> that determine which cluster will be assigned for point -n based on which cluster has the highest probabilities.
+
+<p align="center" id="figure15">
+<img src="pics/image-9.png" width=500>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 15.</b> Log Responsibilities argmax</i></figcaption>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # Test make_blobs Dataset
 ------
 
+Let's try to create dataset from `sklearn.dataset.make_blobs` to investigate how the algorithm works.
 
-Reference:<br>
-[SungWookYo](https://sungwookyoo.github.io/study/algorithms/GaussianMixtureModel_EMalgorithm/)
+```python
+n_samples = 1000
 
+varied = datasets.make_blobs(n_samples=n_samples,
+                             centers=2,
+                             n_features=2,
+                             cluster_std=[4, 1],
+                             random_state=3)
+
+X, y = varied[0], varied[1]
+
+plt.figure( figsize=(10,6))
+plt.scatter(X[:,0], X[:,1], c=y, s=50, cmap=plt.get_cmap('viridis'), **scatter_style)
+plt.title("Make_blobs dataset", **title)
+```
+<p align="center" id="figure16">
+<img src="pics/image-10.png" width=500>
+</p>
+
+Let see how this data works as one cluster,
+
+<p align="center" id="figure17">
+<img src="pics/image-11.png" width=500>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 17.</b> Original Dataset without cluster</i></figcaption>
+</p>
+
+Let us now proceed to compare the operational principles of the <b><i>K-Means clustering</i></b> algorithm with those of the <b><i>Gaussian Mixture Model</i></b> algorithm, concerning their application to the original dataset. 
+- <b><i>K-Means Clustering</i></b> work by assigns each data point to the cluster whose centroid is closest to it, based on some distance metric (usually Euclidean distance). 
+- Besides, <b><i>Gaussian Mixture</i></b> represents each cluster as a probability distribution characterized by its mean and covariance matrix, expressing the likelihood of data points belonging to different clusters as probabilities. 
+
+<b>K-Means</b> aims for a <b>hard assignment</b> of data points to clusters based on distance, <b>GMM</b> takes a <b>soft assignment</b> approach.
+
+<p align="center" id="figure18">
+<img src="pics/image-13.png">
+</p>
+
+Image below is shown how the Gaussian mixture work <b>without</b> <i>cholesky decomposition (inverse covariance)</i> with number of iteration is <b>[1, 5, 10, 15, 20, 25]</b>
+<p align="center" id="figure19">
+<img src="pics/image-14.png" width=550>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 19.</b> GMM ellipse without Cholesky decomposition</i></figcaption>
+</p>
+
+Image below is shown how the Gaussian mixture work <b>with</b> <i>cholesky decomposition (inverse covariance)</i> with number of iteration is <b>[1, 2, 3, 4, 5, 6]</b>
+<p align="center" id="figure20">
+<img src="pics/image-15.png" width=550>
+<figcaption style="text-align:center;font-size:12px;"><b><i>Figure 20.</b> GMM ellipse with Cholesky decomposition</i></figcaption>
+</p>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Reference:
+
+- Bishop, C.M. (2006). <i>Pattern Recognition and Machine Learning</i>. Springer.<br>
+- Géron, A. (2019). <i>Hands-On Machine Learning with Scikit-Learn, Keras & TensorFlow</i>. O'Reilly Media. <br>
+- Liu, M., Zhang, Q., Dai, Y., & Sun, C. (2018). <i>Free-Resolution Probability Distributions Map-Based Precise Vehicle Localization in Urban Areas</i>. IEEE Transactions on Intelligent Transportation Systems, 19(2), 546-559. <br>
+- Albon, C. (2020). <i>Gaussian Mixture Models and Cluster Validation</i>. [Gaussian Mixture Models and Cluster Validation](https://ryanwingate.com/intro-to-machine-learning/unsupervised/gaussian-mixture-models-and-cluster-validation/) <br>
+- Scikit-Learn. Github <br>
 
 
