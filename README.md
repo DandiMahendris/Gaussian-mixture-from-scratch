@@ -3,32 +3,32 @@
 <a name="readme-top"></a>
 
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li><a href="#intoduction">Introduction</a></li>
-    <li><a href="#components-of-learning">Components of Learning</a></li>
-    <li>
-      <a href="#expectation-maximization-algorithm">Expectation-Maximization Algorithm</a>
+
+<summary>Table of Contents</summary>
+<ol>
+  <li><a href="#intoduction">Introduction</a></li>
+  <li><a href="#components-of-learning">Components of Learning</a></li>
+  <li>
+    <a href="#expectation-maximization-algorithm">Expectation-Maximization Algorithm</a>
+    <ul>
+      <li><a href="#1-gaussian-mixture">1. Gaussian Mixture</a></li>
+      <li><a href="#2-maximum-likelihood">2. Maximum Likelihood</a></li>
+      <li><a href="#3-expectation-maximization-method-em">3. Expectation-Maximization Method (EM)</li>
+      </ul>
+  <li>
+      <a href="#pseudocode-of-gmm-algorithm">Pseudocode of GMM Algorithm</a>
       <ul>
-        <li><a href="#1-gaussian-mixture">1. Gaussian Mixture</a></li>
-        <li><a href="#2-maximum-likelihood">2. Maximum Likelihood</a></li>
-        <li><a href="#3-expectation-maximization-method-em">3. Expectation-Maximization Method (EM)</li>
-       </ul>
-    <li>
-        <a href="#pseudocode-of-gmm-algorithm">Pseudocode of GMM Algorithm</a>
-        <ul>
-            <li><a href="#1-initialization-of-weight-mean-and-covariance">1. Initialization of weights, means, and covariance</a></li>
-            <li><a href="#2-expectation-step-e-step">2. Expectation Step (E-Step)</a></li>
-            <li><a href="#3-maximization-step-m-step">3. Maximization Step (M-Step)</a></li>
-            <li><a href="#4-predicted-clusters-of-n_samples">4. Predicted Clusters of n_samples</a></li>
-        </ul>
-        </li>
-    <li>
-      <a href="#test-make_blobs-dataset">Test make_blobs Dataset</a>
-    </li>
-  </ol>
-</details>
+          <li><a href="#1-initialization-of-weight-mean-and-covariance">1. Initialization of weights, means, and covariance</a></li>
+          <li><a href="#2-expectation-step-e-step">2. Expectation Step (E-Step)</a></li>
+          <li><a href="#3-maximization-step-m-step">3. Maximization Step (M-Step)</a></li>
+          <li><a href="#4-predicted-clusters-of-n_samples">4. Predicted Clusters of n_samples</a></li>
+      </ul>
+      </li>
+  <li>
+    <a href="#test-make_blobs-dataset">Test make_blobs Dataset</a>
+  </li>
+</ol>
+
 
 <!-- Introduction -->
 # Introduction
